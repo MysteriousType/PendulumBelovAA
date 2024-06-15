@@ -5,12 +5,11 @@
     public class Pendulum : MonoBehaviour
     {
         private const float MOVE_SPEED = 40f;
+        private const float MAXIMUM_RIGHT_ANGLE = 0.35f;
+        private const float MAXIMUM_LEFT_ANGLE = MAXIMUM_RIGHT_ANGLE * -1f;
 
         private Rigidbody2D _rigidbody2D;
-
         private bool _isMovingClockwise = true;
-        private float _rightAngle = 0.35f;
-        private float _leftAngle = -0.35f;
 
         private void Start()
         {
@@ -24,12 +23,12 @@
 
         private void CheckIfClockwise()
         {
-            if (transform.rotation.z > _rightAngle)
+            if (transform.rotation.z > MAXIMUM_RIGHT_ANGLE)
             {
                 _isMovingClockwise = false;
             }
 
-            if (transform.rotation.z < _leftAngle)
+            if (transform.rotation.z < MAXIMUM_LEFT_ANGLE)
             {
                 _isMovingClockwise = true;
             }
