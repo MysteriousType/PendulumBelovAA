@@ -13,8 +13,6 @@
         private Rigidbody2D _rigidbody;
         private bool _isMovingClockwise = true;
 
-        private float TIME = 2.5f;
-
         private float Angle => transform.rotation.z;
 
         private float AbsAngle => Mathf.Abs(Angle);
@@ -49,24 +47,21 @@
 
         private void Update()
         {
-            if (TIME <= 0f)
-            {
-                return;
-            }
+            CheckTouch();
+        }
 
-            TIME -= Time.deltaTime;
+        private void CheckTouch()
+        {
+            const float VELOCITY_MULTIPLIER = 3.5f;
 
-            if (TIME <= 0f)
+            if (Input.touchCount > 0)
             {
-                const float VELOCITY_MULTIPLIER = 3.5f;
                 GameContext.BallSpawnManager.TryUnattachPendulumBall(_rigidbody.velocity * VELOCITY_MULTIPLIER);
             }
         }
 
         private void Move()
         {
-            Debug.Log(_rigidbody.velocity);
-
             float additionalSpeed = (MAXIMUM_ANGLE - AbsAngle) * MOVE_SPEED_MULTIPLIER;
             float moveSpeed = MOVE_SPEED + additionalSpeed;
 
