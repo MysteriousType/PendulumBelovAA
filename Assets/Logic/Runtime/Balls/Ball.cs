@@ -29,6 +29,11 @@
             transform.localPosition = Vector3.zero;
         }
 
+        public void UnattachFromParent()
+        {
+            transform.parent = null;
+        }
+
         public void Initialize(Action<Ball> onReturnToPool)
         {
             _onReturnToPool = onReturnToPool;

@@ -10,21 +10,39 @@
         private readonly List<ObjectPool<Ball>> BallPools = new();
         private readonly GameObject BallSpawnPositionObject;
 
+        private Ball _pendulumBall;
+
         public BallSpawnManager(GameObject ballSpawnPositionObject)
         {
             BallSpawnPositionObject = ballSpawnPositionObject;
 
             InitializePooling();
 
-            StartSpawning(); // TEMPOOO!!!!
+            SpawnPendulumBall(); // TEMPOOO!!!!
         }
 
-        public void StartSpawning()
+        public void SpawnPendulumBall()
         {
             int ballPoolIndex = Random.Range(0, BallPools.Count);
+
             Ball ball = BallPools[ballPoolIndex].Pop();
             ball.IsSimulated = false;
             ball.AttachToParentObject(BallSpawnPositionObject);
+
+            _pendulumBall = ball;
+        }
+
+        public void TryUnattachPendulumBall()
+        {
+            if (_pendulumBall == null)
+            {
+                return;
+            }
+
+            _pendulumBall.IsSimulated = true;
+            _pendulumBall.UnattachFromParent();
+
+            _pendulumBall = null;
         }
 
         private void InitializePooling()
