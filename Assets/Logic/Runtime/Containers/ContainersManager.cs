@@ -36,9 +36,9 @@
 
         private void CheckMatches(int checkColumnIndex, int checkRowIndex, int ballId)
         {
-            bool matchColumn = CheckColumnForMatch(checkColumnIndex, ballId);
-            bool matchRow = CheckRowForMatch(checkRowIndex, ballId);
-            CheckDiagonalForMatch(checkColumnIndex, checkRowIndex, ballId, out bool matchLeftToRightDiagonal, out bool matchRightToLeftDiagonal);
+            bool matchColumn = HasColumnMatch(checkColumnIndex, ballId);
+            bool matchRow = HasRowMatch(checkRowIndex, ballId);
+            HasDiagonalMatches(checkColumnIndex, checkRowIndex, ballId, out bool matchLeftToRightDiagonal, out bool matchRightToLeftDiagonal);
 
             if (matchColumn)
             {
@@ -61,7 +61,7 @@
             }
         }
 
-        private bool CheckColumnForMatch(int checkColumnIndex, int ballId)
+        private bool HasColumnMatch(int checkColumnIndex, int ballId)
         {
             for (int rowIndex = 0; rowIndex < MATRIX_SIZE; rowIndex++)
             {
@@ -76,7 +76,7 @@
             return true;
         }
 
-        private bool CheckRowForMatch(int checkRowIndex, int ballId)
+        private bool HasRowMatch(int checkRowIndex, int ballId)
         {
             for (int columnIndex = 0; columnIndex < MATRIX_SIZE; columnIndex++)
             {
@@ -91,7 +91,7 @@
             return true;
         }
 
-        private void CheckDiagonalForMatch(int checkColumnIndex, int checkRowIndex, int ballId, out bool matchLeftToRightDiagonal, out bool matchRightToLeftDiagonal)
+        private void HasDiagonalMatches(int checkColumnIndex, int checkRowIndex, int ballId, out bool matchLeftToRightDiagonal, out bool matchRightToLeftDiagonal)
         {
             if ((checkColumnIndex + checkRowIndex) % 2 != 0)
             {
