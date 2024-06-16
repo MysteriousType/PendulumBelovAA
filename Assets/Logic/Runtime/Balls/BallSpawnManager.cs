@@ -8,7 +8,7 @@
 
     public class BallSpawnManager
     {
-        private const float BALL_SPAWN_DELAY_TIME = 1f;
+        private const float BALL_SPAWN_DELAY_TIME = 1.33f;
 
         private readonly List<ObjectPool<Ball>> BallPools = new();
         private readonly GameObject BallSpawnPositionObject;

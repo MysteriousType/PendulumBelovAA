@@ -24,10 +24,79 @@
                 if (Balls[columnIndex, rowIndex] == null)
                 {
                     Balls[columnIndex, rowIndex] = ball;
-                    UnityEngine.Debug.Log($"{columnIndex}|{rowIndex}");
+                    CheckMatches(columnIndex, rowIndex, ball.BallData.Id);
                     break;
                 }
             }
+        }
+
+        private void CheckMatches(int checkColumnIndex, int checkRowIndex, int ballId)
+        {
+            // Check column for match
+            for (int rowIndex = 0; rowIndex < MATRIX_SIZE; rowIndex++)
+            {
+                Ball ball = Balls[checkColumnIndex, rowIndex];
+
+                if (ball == null || ball.BallData.Id != ballId)
+                {
+                    break;
+                }
+            }
+
+            // Check row for match
+            for (int columnIndex = 0; columnIndex < MATRIX_SIZE; columnIndex++)
+            {
+                Ball ball = Balls[columnIndex, checkRowIndex];
+
+                if (ball == null || ball.BallData.Id != ballId)
+                {
+                    break;
+                }
+            }
+
+            // Check diagonal  for match
+            for (int index = 0; index < MATRIX_SIZE; index++)
+            {
+                Ball ball = Balls[index, index];
+
+                if (ball == null || ball.BallData.Id != ballId)
+                {
+                    break;
+                }
+            }
+        }
+
+        private void ClearColumn(int columnIndex)
+        {
+            for (int rowIndex = 0; rowIndex < MATRIX_SIZE; rowIndex++)
+            {
+                RemoveBall(columnIndex, rowIndex);
+            }
+        }
+
+        private void ClearRow(int rowIndex)
+        {
+            for (int columnIndex = 0; columnIndex < MATRIX_SIZE; columnIndex++)
+            {
+                RemoveBallFromMatrix(columnIndex, rowIndex);
+            }
+        }
+
+        private void RemoveBallFromMatrix(int removeAtColumnIndex, int removeAtRowIndex)
+        {
+            for (int rowIndex = removeAtRowIndex; rowIndex >= 1; rowIndex--)
+            {
+                Balls[removeAtColumnIndex, rowIndex] = Balls[removeAtColumnIndex, rowIndex--];
+            }
+
+            // If we not got into "for" body, then removeAtRowIndex is 0
+            RemoveBall(removeAtColumnIndex, 0);
+        }
+
+        private void RemoveBall(int removeAtColumnIndex, int removeAtRowIndex)
+        {
+            Balls[removeAtColumnIndex, removeAtRowIndex].DestroyWithDelay();
+            Balls[removeAtColumnIndex, removeAtRowIndex] = null;
         }
 
         private int GetColumnIndexByXPosiiton(float xPosition)
