@@ -6,16 +6,18 @@
     {
         private const float MOVE_SPEED = 25f;
         private const float MOVE_SPEED_MULTIPLIER = 150f;
-        private const float MAXIMUM_ANGLE = 0.45f;
+        private const float MAXIMUM_ANGLE = 0.5f;
         private const float MAXIMUM_RIGHT_ANGLE = MAXIMUM_ANGLE;
         private const float MAXIMUM_LEFT_ANGLE = MAXIMUM_ANGLE * -1f;
 
         private Rigidbody2D _rigidbody;
         private bool _isMovingClockwise = true;
 
-        private float TIME = 1.5f;
+        private float TIME = 2.5f;
 
         private float Angle => transform.rotation.z;
+
+        private float AbsAngle => Mathf.Abs(Angle);
 
         private bool IsMovingClockwise
         {
@@ -56,13 +58,16 @@
 
             if (TIME <= 0f)
             {
-                GameContext.BallSpawnManager.TryUnattachPendulumBall();
+                const float VELOCITY_MULTIPLIER = 3.5f;
+                GameContext.BallSpawnManager.TryUnattachPendulumBall(_rigidbody.velocity * VELOCITY_MULTIPLIER);
             }
         }
 
         private void Move()
         {
-            float additionalSpeed = (MAXIMUM_ANGLE - Mathf.Abs(Angle)) * MOVE_SPEED_MULTIPLIER;
+            Debug.Log(_rigidbody.velocity);
+
+            float additionalSpeed = (MAXIMUM_ANGLE - AbsAngle) * MOVE_SPEED_MULTIPLIER;
             float moveSpeed = MOVE_SPEED + additionalSpeed;
 
             if (IsMovingClockwise)

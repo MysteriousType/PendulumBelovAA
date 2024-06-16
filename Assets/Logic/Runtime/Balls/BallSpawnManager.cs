@@ -32,7 +32,7 @@
             _pendulumBall = ball;
         }
 
-        public void TryUnattachPendulumBall()
+        public void TryUnattachPendulumBall(Vector2 velocity)
         {
             if (_pendulumBall == null)
             {
@@ -41,6 +41,7 @@
 
             _pendulumBall.IsSimulated = true;
             _pendulumBall.UnattachFromParent();
+            _pendulumBall.SetVelocity(velocity);
 
             _pendulumBall = null;
         }

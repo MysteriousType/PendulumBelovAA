@@ -29,6 +29,11 @@
             transform.localPosition = Vector3.zero;
         }
 
+        public void SetVelocity(Vector2 velocity)
+        {
+            _rigidbody.velocity = velocity;
+        }
+
         public void UnattachFromParent()
         {
             transform.parent = null;
