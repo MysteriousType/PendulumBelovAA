@@ -1,11 +1,13 @@
 ﻿namespace Assets.Logic.Runtime
 {
+    using Assets.Logic.Runtime.Pendulums;
     using Assets.Logic.Runtime.Providers;
     using UnityEngine;
 
     public static class GameContext
     {
         public static PrefabsProvider PrefabsProvider { get; private set; }
+        public static PendulumBallSpawnManager PendulumBallSpawnManager { get; private set; }
 
         public static void Initialize()
         {
@@ -13,6 +15,7 @@
             InitializeCameraSize();
 
             PrefabsProvider = new PrefabsProvider();
+            PendulumBallSpawnManager = new PendulumBallSpawnManager();
         }
 
         private static void InitializeQuality()
