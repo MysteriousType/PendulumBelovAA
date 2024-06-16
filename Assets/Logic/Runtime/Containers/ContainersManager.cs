@@ -7,24 +7,12 @@
         private const int MATRIX_SIZE = 3;
         private readonly Ball[,] Balls = new Ball[MATRIX_SIZE, MATRIX_SIZE];
 
-        private readonly ContainerTrigger TopTrigger;
-        private readonly ContainerTrigger CenterTrigger;
-        private readonly ContainerTrigger BottomTrigger;
+        private readonly ContainerTrigger BallTrigger;
 
-        public ContainersManager(ContainerTrigger topTrigger, ContainerTrigger centerTrigger, ContainerTrigger bottomTrigger)
+        public ContainersManager(ContainerTrigger ballTrigger)
         {
-            TopTrigger = topTrigger;
-            CenterTrigger = centerTrigger;
-            BottomTrigger = bottomTrigger;
-
-            InitializeTriggers();
-        }
-
-        private void InitializeTriggers()
-        {
-            TopTrigger.OnBallEntered += OnBallLanded;
-            CenterTrigger.OnBallEntered += OnBallLanded;
-            BottomTrigger.OnBallEntered += OnBallLanded;
+            BallTrigger = ballTrigger;
+            BallTrigger.OnBallEntered += OnBallLanded;
         }
 
         private void OnBallLanded(Ball ball)

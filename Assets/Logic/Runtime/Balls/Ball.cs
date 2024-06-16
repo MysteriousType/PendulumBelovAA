@@ -13,15 +13,32 @@
         private Action<Ball> _onReturnToPool;
         private Rigidbody2D _rigidbody;
 
+        private bool _isSimulated;
+
         public bool IsSimulated
         {
+            get => _isSimulated;
             set
             {
+                _isSimulated = value;
                 _rigidbody.simulated = value;
             }
         }
 
         public BallData BallData => _ballData;
+
+        private void Update()
+        {
+            CheckIfOutOfBounds();
+        }
+
+        private void CheckIfOutOfBounds()
+        {
+            if (IsSimulated && transform.position.y <= -10f)
+            {
+                _onReturnToPool?.Invoke(this);
+            }
+        }
 
         public void AttachToParentObject(GameObject parentObject)
         {
@@ -52,6 +69,7 @@
 
         public void OnPushed()
         {
+            _rigidbody.velocity = Vector2.zero;
             gameObject.SetActive(false);
         }
     }

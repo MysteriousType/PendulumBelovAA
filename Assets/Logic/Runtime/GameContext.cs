@@ -1,6 +1,7 @@
 ﻿namespace Assets.Logic.Runtime
 {
     using Assets.Logic.Runtime.Balls;
+    using Assets.Logic.Runtime.Containers;
     using Assets.Logic.Runtime.Providers;
     using Assets.Logic.Runtime.Time;
     using UnityEngine;
@@ -11,6 +12,7 @@
         public static PrefabsProvider PrefabsProvider { get; private set; }
         public static BallSpawnManager BallSpawnManager { get; private set; }
         public static TimeManager TimeManager { get; private set; }
+        public static ContainersManager ContainersManager { get; private set; }
 
         public static void Initialize()
         {
@@ -20,6 +22,7 @@
             InitializeQuality();
             InitializeCameraSize();
             InitializeBallSpawnManager();
+            InitializeContainersManager();
         }
 
         private static void InitializeTime()
@@ -47,6 +50,12 @@
         {
             GameObject ballSpawnPositionObject = GameObject.Find("BallSpawnPosition");
             BallSpawnManager = new BallSpawnManager(ballSpawnPositionObject);
+        }
+
+        private static void InitializeContainersManager()
+        {
+            ContainerTrigger trigger = GameObject.Find("ContainerBallTrigger").GetComponent<ContainerTrigger>();
+            ContainersManager = new ContainersManager(trigger);
         }
     }
 }
