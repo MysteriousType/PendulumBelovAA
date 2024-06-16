@@ -15,6 +15,8 @@
 
         private bool _isSimulated;
 
+        public event Action<Ball> OnBallLanded;
+
         public bool IsSimulated
         {
             get => _isSimulated;
@@ -30,6 +32,27 @@
         private void Update()
         {
             CheckIfOutOfBounds();
+            CheckIfBallLanded();
+        }
+
+        private void Start()
+        {
+            _rigidbody = GetComponent<Rigidbody2D>();
+        }
+
+        private void CheckIfBallLanded()
+        {
+            const float ALMOST_ZERO_SPEED = 0f;
+
+            if (OnBallLanded == null)
+            {
+                return;
+            }
+
+            if (_rigidbody.velocity.x <= ALMOST_ZERO_SPEED && _rigidbody.velocity.y <= ALMOST_ZERO_SPEED)
+            {
+                OnBallLanded?.Invoke(this);
+            }
         }
 
         private void CheckIfOutOfBounds()
@@ -40,7 +63,7 @@
             }
         }
 
-        public void DestroyWithDelay()
+        public void ReturnToPool()
         {
             _onReturnToPool?.Invoke(this);
         }
