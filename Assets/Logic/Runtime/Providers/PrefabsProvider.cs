@@ -21,6 +21,8 @@
             string[] prefabNames = new string[]
             {
                 "Ball1",
+                "Ball2",
+                "Ball3",
             };
 
             List<Ball> balls = new();
