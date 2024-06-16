@@ -6,7 +6,6 @@
     {
         private const int MATRIX_SIZE = 3;
         private readonly Ball[,] Balls = new Ball[MATRIX_SIZE, MATRIX_SIZE];
-
         private readonly ContainerTrigger BallTrigger;
 
         public ContainersManager(ContainerTrigger ballTrigger)
@@ -32,38 +31,99 @@
 
         private void CheckMatches(int checkColumnIndex, int checkRowIndex, int ballId)
         {
-            // Check column for match
+            CheckColumnForMatch(checkColumnIndex, ballId);
+            CheckRowForMatch(checkRowIndex, ballId);
+            CheckDiagonalForMatch(checkColumnIndex, checkRowIndex, ballId);
+        }
+
+        private void CheckColumnForMatch(int checkColumnIndex, int ballId)
+        {
             for (int rowIndex = 0; rowIndex < MATRIX_SIZE; rowIndex++)
             {
                 Ball ball = Balls[checkColumnIndex, rowIndex];
 
                 if (ball == null || ball.BallData.Id != ballId)
                 {
-                    break;
+                    return;
                 }
             }
 
-            // Check row for match
+            ClearColumn(checkColumnIndex);
+        }
+
+        private void CheckRowForMatch(int checkRowIndex, int ballId)
+        {
             for (int columnIndex = 0; columnIndex < MATRIX_SIZE; columnIndex++)
             {
                 Ball ball = Balls[columnIndex, checkRowIndex];
 
                 if (ball == null || ball.BallData.Id != ballId)
                 {
-                    break;
+                    return;
                 }
             }
 
-            // Check diagonal  for match
+            ClearRow(checkRowIndex);
+        }
+
+        private void CheckDiagonalForMatch(int checkColumnIndex, int checkRowIndex, int ballId)
+        {
+            if ((checkColumnIndex + checkRowIndex) % 2 != 0)
+            {
+                return;
+            }
+
+            CheckDiagonalLeftToRight(ballId);
+            CheckDiagonalRightToLeft(ballId);
+        }
+
+        private void CheckDiagonalLeftToRight(int ballId)
+        {
             for (int index = 0; index < MATRIX_SIZE; index++)
             {
                 Ball ball = Balls[index, index];
 
                 if (ball == null || ball.BallData.Id != ballId)
                 {
-                    break;
+                    return;
                 }
             }
+
+            ClearDiagonal(true);
+        }
+
+        private void CheckDiagonalRightToLeft(int ballId)
+        {
+            int rowIndex = 0;
+
+            for (int columnIndex = MATRIX_SIZE; columnIndex >= 0; columnIndex--)
+            {
+                Ball ball = Balls[columnIndex, rowIndex];
+
+                if (ball == null || ball.BallData.Id != ballId)
+                {
+                    return;
+                }
+
+                rowIndex++;
+            }
+
+            ClearDiagonal(false);
+        }
+
+        private void ClearDiagonal(bool isLeftToRight)
+        {
+            RemoveBallFromMatrix(1, 1);
+
+            if (isLeftToRight)
+            {
+                RemoveBallFromMatrix(0, 0);
+                RemoveBallFromMatrix(2, 2);
+                return;
+            }
+
+            RemoveBallFromMatrix(0, 2);
+            RemoveBallFromMatrix(2, 0);
         }
 
         private void ClearColumn(int columnIndex)
