@@ -7,7 +7,7 @@
         public static void Initialize()
         {
             InitializeQuality();
-            InitializeCamera();
+            InitializeCameraSize();
         }
 
         private static void InitializeQuality()
@@ -16,17 +16,13 @@
             Application.targetFrameRate = FRAME_RATE_LOCK;
         }
 
-        private static void InitializeCamera()
+        private static void InitializeCameraSize()
         {
+            const float SCENE_WIDTH = 5f;
+            const float SCENE_HEIGHT = 10f;
+
             Camera camera = Camera.main;
-
-            float w = 5;
-            float h = 10;
-            float x = w * 0.5f - 0.5f;
-            float y = h * 0.5f - 0.5f;
-
-            //camera.transform.position = new Vector3(x, y, -10f);
-            camera.orthographicSize = ((w > h * camera.aspect) ? (float)w / (float)camera.pixelWidth * camera.pixelHeight : h) / 2f;
+            camera.orthographicSize = ((SCENE_WIDTH > SCENE_HEIGHT * camera.aspect) ? SCENE_WIDTH / camera.pixelWidth * camera.pixelHeight : SCENE_HEIGHT) * 0.5f;
         }
     }
 }
