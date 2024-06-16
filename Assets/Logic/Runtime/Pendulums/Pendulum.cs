@@ -8,7 +8,7 @@
         private const float MAXIMUM_RIGHT_ANGLE = 0.35f;
         private const float MAXIMUM_LEFT_ANGLE = MAXIMUM_RIGHT_ANGLE * -1f;
 
-        private Rigidbody2D _rigidbody2D;
+        private Rigidbody2D _rigidbody;
         private bool _isMovingClockwise = true;
 
         private bool IsMovingClockwise
@@ -31,7 +31,7 @@
 
         private void Start()
         {
-            _rigidbody2D = GetComponent<Rigidbody2D>();
+            _rigidbody = GetComponent<Rigidbody2D>();
         }
 
         private void FixedUpdate()
@@ -43,11 +43,11 @@
         {
             if (IsMovingClockwise)
             {
-                _rigidbody2D.angularVelocity = MOVE_SPEED;
+                _rigidbody.angularVelocity = MOVE_SPEED;
             }
             else
             {
-                _rigidbody2D.angularVelocity = MOVE_SPEED * -1f;
+                _rigidbody.angularVelocity = MOVE_SPEED * -1f;
             }
         }
     }

@@ -1,13 +1,18 @@
 ﻿namespace Assets.Logic.Runtime
 {
+    using Assets.Logic.Runtime.Providers;
     using UnityEngine;
 
     public static class GameContext
     {
+        public static PrefabsProvider PrefabsProvider { get; private set; }
+
         public static void Initialize()
         {
             InitializeQuality();
             InitializeCameraSize();
+
+            PrefabsProvider = new PrefabsProvider();
         }
 
         private static void InitializeQuality()
