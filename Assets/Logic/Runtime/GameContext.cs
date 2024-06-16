@@ -36,8 +36,8 @@
 
         private static void InitializeCameraSize()
         {
-            const float SCENE_WIDTH = 5f;
-            const float SCENE_HEIGHT = 10f;
+            const float SCENE_WIDTH = 1080f / 100f * 0.4f;
+            const float SCENE_HEIGHT = 1920f / 100f * 0.4f;
 
             Camera camera = Camera.main;
             camera.orthographicSize = ((SCENE_WIDTH > SCENE_HEIGHT * camera.aspect) ? SCENE_WIDTH / camera.pixelWidth * camera.pixelHeight : SCENE_HEIGHT) * 0.5f;
