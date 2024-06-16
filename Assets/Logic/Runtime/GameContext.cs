@@ -2,21 +2,30 @@
 {
     using Assets.Logic.Runtime.Balls;
     using Assets.Logic.Runtime.Providers;
+    using Assets.Logic.Runtime.Time;
     using UnityEngine;
+    using UnityObject = UnityEngine.Object;
 
     public static class GameContext
     {
         public static PrefabsProvider PrefabsProvider { get; private set; }
         public static BallSpawnManager BallSpawnManager { get; private set; }
+        public static TimeManager TimeManager { get; private set; }
 
         public static void Initialize()
         {
             PrefabsProvider = new PrefabsProvider();
 
+            InitializeTime();
             InitializeQuality();
             InitializeCameraSize();
             InitializeBallSpawnManager();
+        }
 
+        private static void InitializeTime()
+        {
+            TimeManager = UnityObject.Instantiate(PrefabsProvider.TimeManager);
+            UnityObject.DontDestroyOnLoad(TimeManager);
         }
 
         private static void InitializeQuality()

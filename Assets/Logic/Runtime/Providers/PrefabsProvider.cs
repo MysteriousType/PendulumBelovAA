@@ -1,15 +1,18 @@
 ﻿namespace Assets.Logic.Runtime.Providers
 {
     using Assets.Logic.Runtime.Balls;
+    using Assets.Logic.Runtime.Time;
     using System.Collections.Generic;
     using UnityEngine;
 
     public class PrefabsProvider
     {
         public IReadOnlyList<Ball> BallPrefabs { get; private set; }
+        public TimeManager TimeManager { get; private set; }
 
         public PrefabsProvider()
         {
+            LoadTimeManager();
             LoadBalls();
         }
 
@@ -30,6 +33,12 @@
             }
 
             BallPrefabs = balls;
+        }
+
+        private void LoadTimeManager()
+        {
+            const string PATH = "Prefabs/Managers/TimeManager";
+            TimeManager = LoadPrefab(PATH).GetComponent<TimeManager>();
         }
 
         private GameObject LoadPrefab(string path)
