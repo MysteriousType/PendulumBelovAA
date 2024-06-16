@@ -12,18 +12,19 @@
         public ContainersManager(ContainerTrigger ballTrigger)
         {
             BallTrigger = ballTrigger;
-            BallTrigger.OnBallEntered += OnBallLanded;
+            BallTrigger.OnBallEntered += OnBallEntered;
         }
 
-        private void OnBallLanded(Ball ball)
+        private void OnBallEntered(Ball ball)
         {
             int columnIndex = GetColumnIndexByXPosiiton(ball.transform.position.x);
 
-            for (int rowIndex = 0; rowIndex < MATRIX_SIZE; rowIndex++)
+            for (int rowIndex = MATRIX_SIZE - 1; rowIndex >= 0; rowIndex--)
             {
-                if (Balls[columnIndex, rowIndex] != null)
+                if (Balls[columnIndex, rowIndex] == null)
                 {
                     Balls[columnIndex, rowIndex] = ball;
+                    UnityEngine.Debug.Log($"{columnIndex}|{rowIndex}");
                     break;
                 }
             }
