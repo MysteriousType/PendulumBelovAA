@@ -16,6 +16,8 @@
         {
             BallTrigger = ballTrigger;
             BallTrigger.OnBallEntered += OnBallEntered;
+
+            // Invoke timer only if any diagonal was removed! Check only rows in this case (except for row with index 0)
             CheckMatchesPeriodTimer = new TimerEntity(CHECK_MATCHES_PERIOD_DURATION_TIME, onTimeIsUp:);
         }
 
@@ -184,6 +186,17 @@
         {
             Balls[removeAtColumnIndex, removeAtRowIndex].DestroyWithDelay();
             Balls[removeAtColumnIndex, removeAtRowIndex] = null;
+        }
+
+        private void ShiftBallsInMatrix()
+        {
+            for (int columnIndex = 0; columnIndex < MATRIX_SIZE; columnIndex++)
+            {
+                for (int rowIndex = MATRIX_SIZE - 1; rowIndex >= 0; rowIndex--)
+                {
+                    Balls[columnIndex, rowIndex] = Balls[columnIndex, rowIndex--];
+                }
+            }
         }
 
         private int GetColumnIndexByXPosiiton(float xPosition)

@@ -40,6 +40,11 @@
             }
         }
 
+        public void DestroyWithDelay()
+        {
+            _onReturnToPool?.Invoke(this);
+        }
+
         public void AttachToParentObject(GameObject parentObject)
         {
             transform.parent = parentObject.transform;
