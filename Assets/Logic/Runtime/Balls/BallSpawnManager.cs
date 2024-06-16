@@ -1,17 +1,19 @@
-﻿namespace Assets.Logic.Runtime.Pendulums
+﻿namespace Assets.Logic.Runtime.Balls
 {
     using System.Collections.Generic;
-    using Assets.Logic.Runtime.Balls;
     using Assets.Logic.Runtime.Common.ObjectPooling;
     using UnityEngine;
     using UnityObject = UnityEngine.Object;
 
-    public class PendulumBallSpawnManager
+    public class BallSpawnManager
     {
         private readonly List<ObjectPool<Ball>> BallPools = new();
+        private readonly GameObject BallSpawnPositionObject;
 
-        public PendulumBallSpawnManager()
+        public BallSpawnManager(GameObject ballSpawnPositionObject)
         {
+            BallSpawnPositionObject = ballSpawnPositionObject;
+
             InitializePooling();
 
             StartSpawning(); // TEMPOOO!!!!
@@ -21,6 +23,8 @@
         {
             int ballPoolIndex = Random.Range(0, BallPools.Count);
             Ball ball = BallPools[ballPoolIndex].Pop();
+            ball.IsSimulated = false;
+            ball.AttachToParentObject(BallSpawnPositionObject);
         }
 
         private void InitializePooling()
