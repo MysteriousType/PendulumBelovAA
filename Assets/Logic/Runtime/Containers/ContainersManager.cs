@@ -1,17 +1,22 @@
 ﻿namespace Assets.Logic.Runtime.Containers
 {
     using Assets.Logic.Runtime.Balls;
+    using Assets.Logic.Runtime.Time;
 
     public class ContainersManager
     {
         private const int MATRIX_SIZE = 3;
+        private const float CHECK_MATCHES_PERIOD_DURATION_TIME = 0.88f;
+
         private readonly Ball[,] Balls = new Ball[MATRIX_SIZE, MATRIX_SIZE];
         private readonly ContainerTrigger BallTrigger;
+        private readonly TimerEntity CheckMatchesPeriodTimer;
 
         public ContainersManager(ContainerTrigger ballTrigger)
         {
             BallTrigger = ballTrigger;
             BallTrigger.OnBallEntered += OnBallEntered;
+            CheckMatchesPeriodTimer = new TimerEntity(CHECK_MATCHES_PERIOD_DURATION_TIME, onTimeIsUp:);
         }
 
         private void OnBallEntered(Ball ball)
@@ -31,12 +36,32 @@
 
         private void CheckMatches(int checkColumnIndex, int checkRowIndex, int ballId)
         {
-            CheckColumnForMatch(checkColumnIndex, ballId);
-            CheckRowForMatch(checkRowIndex, ballId);
-            CheckDiagonalForMatch(checkColumnIndex, checkRowIndex, ballId);
+            bool matchColumn = CheckColumnForMatch(checkColumnIndex, ballId);
+            bool matchRow = CheckRowForMatch(checkRowIndex, ballId);
+            CheckDiagonalForMatch(checkColumnIndex, checkRowIndex, ballId, out bool matchLeftToRightDiagonal, out bool matchRightToLeftDiagonal);
+
+            if (matchColumn)
+            {
+                ClearColumn(checkColumnIndex);
+            }
+
+            if (matchRow)
+            {
+                ClearRow(checkRowIndex);
+            }
+
+            if (matchLeftToRightDiagonal)
+            {
+                ClearDiagonal(true);
+            }
+
+            if (matchRightToLeftDiagonal)
+            {
+                ClearDiagonal(false);
+            }
         }
 
-        private void CheckColumnForMatch(int checkColumnIndex, int ballId)
+        private bool CheckColumnForMatch(int checkColumnIndex, int ballId)
         {
             for (int rowIndex = 0; rowIndex < MATRIX_SIZE; rowIndex++)
             {
@@ -44,14 +69,14 @@
 
                 if (ball == null || ball.BallData.Id != ballId)
                 {
-                    return;
+                    return false;
                 }
             }
 
-            ClearColumn(checkColumnIndex);
+            return true;
         }
 
-        private void CheckRowForMatch(int checkRowIndex, int ballId)
+        private bool CheckRowForMatch(int checkRowIndex, int ballId)
         {
             for (int columnIndex = 0; columnIndex < MATRIX_SIZE; columnIndex++)
             {
@@ -59,25 +84,27 @@
 
                 if (ball == null || ball.BallData.Id != ballId)
                 {
-                    return;
+                    return false;
                 }
             }
 
-            ClearRow(checkRowIndex);
+            return true;
         }
 
-        private void CheckDiagonalForMatch(int checkColumnIndex, int checkRowIndex, int ballId)
+        private void CheckDiagonalForMatch(int checkColumnIndex, int checkRowIndex, int ballId, out bool matchLeftToRightDiagonal, out bool matchRightToLeftDiagonal)
         {
             if ((checkColumnIndex + checkRowIndex) % 2 != 0)
             {
+                matchLeftToRightDiagonal = false;
+                matchRightToLeftDiagonal = false;
                 return;
             }
 
-            CheckDiagonalLeftToRight(ballId);
-            CheckDiagonalRightToLeft(ballId);
+            matchLeftToRightDiagonal = CheckDiagonalLeftToRight(ballId);
+            matchRightToLeftDiagonal = CheckDiagonalRightToLeft(ballId);
         }
 
-        private void CheckDiagonalLeftToRight(int ballId)
+        private bool CheckDiagonalLeftToRight(int ballId)
         {
             for (int index = 0; index < MATRIX_SIZE; index++)
             {
@@ -85,14 +112,14 @@
 
                 if (ball == null || ball.BallData.Id != ballId)
                 {
-                    return;
+                    return false;
                 }
             }
 
-            ClearDiagonal(true);
+            return true;
         }
 
-        private void CheckDiagonalRightToLeft(int ballId)
+        private bool CheckDiagonalRightToLeft(int ballId)
         {
             int rowIndex = 0;
 
@@ -102,13 +129,13 @@
 
                 if (ball == null || ball.BallData.Id != ballId)
                 {
-                    return;
+                    return false;
                 }
 
                 rowIndex++;
             }
 
-            ClearDiagonal(false);
+            return true;
         }
 
         private void ClearDiagonal(bool isLeftToRight)
