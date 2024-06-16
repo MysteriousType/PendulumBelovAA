@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6f2ecc3fe462b84e8a475ef22264d31, type: 3}
   m_Name: BallData2
   m_EditorClassIdentifier: 
-  _id: 0
+  _id: 1
   _score: 10

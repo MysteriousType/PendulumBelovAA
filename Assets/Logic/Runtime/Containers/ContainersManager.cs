@@ -18,7 +18,7 @@
             BallTrigger.OnBallEntered += OnBallEntered;
 
             // Invoke timer only if any diagonal was removed! Check only rows in this case (except for row with index 0)
-            CheckMatchesPeriodTimer = new TimerEntity(CHECK_MATCHES_PERIOD_DURATION_TIME, onTimeIsUp:);
+            //CheckMatchesPeriodTimer = new TimerEntity(CHECK_MATCHES_PERIOD_DURATION_TIME, onTimeIsUp:);
         }
 
         private void OnBallEntered(Ball ball)
@@ -60,6 +60,13 @@
             if (matchRightToLeftDiagonal)
             {
                 ClearDiagonal(false);
+            }
+
+            bool needToShiftBalls = matchRow || matchLeftToRightDiagonal || matchRightToLeftDiagonal;
+
+            if (needToShiftBalls)
+            {
+                ShiftBallsInMatrix();
             }
         }
 
@@ -125,7 +132,7 @@
         {
             int rowIndex = 0;
 
-            for (int columnIndex = MATRIX_SIZE; columnIndex >= 0; columnIndex--)
+            for (int columnIndex = MATRIX_SIZE - 1; columnIndex >= 0; columnIndex--)
             {
                 Ball ball = Balls[columnIndex, rowIndex];
 
@@ -142,17 +149,17 @@
 
         private void ClearDiagonal(bool isLeftToRight)
         {
-            RemoveBallFromMatrix(1, 1);
+            RemoveBall(1, 1);
 
             if (isLeftToRight)
             {
-                RemoveBallFromMatrix(0, 0);
-                RemoveBallFromMatrix(2, 2);
+                RemoveBall(0, 0);
+                RemoveBall(2, 2);
                 return;
             }
 
-            RemoveBallFromMatrix(0, 2);
-            RemoveBallFromMatrix(2, 0);
+            RemoveBall(0, 2);
+            RemoveBall(2, 0);
         }
 
         private void ClearColumn(int columnIndex)
@@ -167,34 +174,47 @@
         {
             for (int columnIndex = 0; columnIndex < MATRIX_SIZE; columnIndex++)
             {
-                RemoveBallFromMatrix(columnIndex, rowIndex);
+                RemoveBall(columnIndex, rowIndex);
             }
-        }
-
-        private void RemoveBallFromMatrix(int removeAtColumnIndex, int removeAtRowIndex)
-        {
-            for (int rowIndex = removeAtRowIndex; rowIndex >= 1; rowIndex--)
-            {
-                Balls[removeAtColumnIndex, rowIndex] = Balls[removeAtColumnIndex, rowIndex--];
-            }
-
-            // If we not got into "for" body, then removeAtRowIndex is 0
-            RemoveBall(removeAtColumnIndex, 0);
         }
 
         private void RemoveBall(int removeAtColumnIndex, int removeAtRowIndex)
         {
+            if (Balls[removeAtColumnIndex, removeAtRowIndex] == null)
+            {
+                return;
+            }
+
             Balls[removeAtColumnIndex, removeAtRowIndex].DestroyWithDelay();
             Balls[removeAtColumnIndex, removeAtRowIndex] = null;
         }
 
         private void ShiftBallsInMatrix()
         {
+            const int INVALID_INDEX_VALUE = int.MinValue;
+
             for (int columnIndex = 0; columnIndex < MATRIX_SIZE; columnIndex++)
             {
+                int lowestEmptyRowIndex = INVALID_INDEX_VALUE;
+
                 for (int rowIndex = MATRIX_SIZE - 1; rowIndex >= 0; rowIndex--)
                 {
-                    Balls[columnIndex, rowIndex] = Balls[columnIndex, rowIndex--];
+                    if (Balls[columnIndex, rowIndex] == null)
+                    {
+                        if (lowestEmptyRowIndex < rowIndex)
+                        {
+                            lowestEmptyRowIndex = rowIndex;
+                        }
+
+                        continue;
+                    }
+
+                    if (lowestEmptyRowIndex != INVALID_INDEX_VALUE)
+                    {
+                        Balls[columnIndex, lowestEmptyRowIndex] = Balls[columnIndex, rowIndex];
+                        Balls[columnIndex, rowIndex] = null;
+                        lowestEmptyRowIndex--;
+                    }
                 }
             }
         }
