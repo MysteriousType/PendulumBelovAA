@@ -11,34 +11,37 @@
         private Rigidbody2D _rigidbody2D;
         private bool _isMovingClockwise = true;
 
+        private bool IsMovingClockwise
+        {
+            get
+            {
+                if (transform.rotation.z > MAXIMUM_RIGHT_ANGLE)
+                {
+                    _isMovingClockwise = false;
+                }
+
+                if (transform.rotation.z < MAXIMUM_LEFT_ANGLE)
+                {
+                    _isMovingClockwise = true;
+                }
+
+                return _isMovingClockwise;
+            }
+        }
+
         private void Start()
         {
             _rigidbody2D = GetComponent<Rigidbody2D>();
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
             Move();
         }
 
-        private void CheckIfClockwise()
-        {
-            if (transform.rotation.z > MAXIMUM_RIGHT_ANGLE)
-            {
-                _isMovingClockwise = false;
-            }
-
-            if (transform.rotation.z < MAXIMUM_LEFT_ANGLE)
-            {
-                _isMovingClockwise = true;
-            }
-        }
-
         private void Move()
         {
-            CheckIfClockwise();
-
-            if (_isMovingClockwise)
+            if (IsMovingClockwise)
             {
                 _rigidbody2D.angularVelocity = MOVE_SPEED;
             }
