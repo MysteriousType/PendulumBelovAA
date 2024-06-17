@@ -13,7 +13,7 @@
 
         public void RestartLevel()
         {
-            GameContext.BallSpawnManager.ClearPendulumBall();
+            GameContext.BallSpawnManager.OnLevelEnds();
             GameContext.CanvasManager.CloseEndgameMenu();
             GameContext.ContainersManager.ClearAll();
             Pendulum.ResetAndEnable();
@@ -22,14 +22,14 @@
         public void StartLevel()
         {
             GameContext.CanvasManager.CloseMainMenu();
-            GameContext.BallSpawnManager.SpawnPendulumBall();
+            GameContext.BallSpawnManager.OnLevelStarts();
             GameContext.ScoreManager.ResetScore();
             Pendulum.ResetAndEnable();
         }
 
         public void FailLevel()
         {
-            GameContext.BallSpawnManager.ClearPendulumBall();
+            GameContext.BallSpawnManager.OnLevelEnds();
             GameContext.CanvasManager.OpenEndgameMenu();
             GameContext.ContainersManager.ClearAll();
             Pendulum.Disable();

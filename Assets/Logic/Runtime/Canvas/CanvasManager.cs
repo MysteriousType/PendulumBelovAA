@@ -2,25 +2,31 @@
 {
     using Assets.Logic.Runtime.Common.Extensions;
     using UnityEngine;
+    using UnityEngine.UI;
 
     public class CanvasManager
     {
         private readonly GameObject MainMenuPanel;
         private readonly RectTransform MainMenuTitleTransform;
         private readonly GameObject EndgamePanel;
+        private readonly Text EndgameTitleText;
 
         private int? _titleScaleTweenId = null;
 
         public CanvasManager()
         {
-            MainMenuPanel = GameObject.Find("MainMenuPanel");
+            Canvas canvas = Object.FindObjectOfType<Canvas>();
+
+            MainMenuPanel = canvas.FindChildByName("MainMenuPanel").gameObject;
             MainMenuTitleTransform = MainMenuPanel.transform.FindComponentInChild<RectTransform>("TitleText");
-            EndgamePanel = GameObject.Find("EndgamePanel");
+            EndgamePanel = canvas.FindChildByName("EndgamePanel").gameObject;
+            EndgameTitleText = EndgamePanel.transform.FindComponentInChild<Text>("TitleText");
         }
 
         public void OpenEndgameMenu()
         {
             EndgamePanel.SetActive(true);
+            EndgameTitleText.text = $"YOUR SCORE: {GameContext.ScoreManager.Score}";
         }
 
         public void CloseEndgameMenu()

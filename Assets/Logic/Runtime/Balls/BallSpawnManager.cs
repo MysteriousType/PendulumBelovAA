@@ -24,15 +24,22 @@
             InitializePooling();
         }
 
-        public void ClearPendulumBall()
+        public void OnLevelEnds()
         {
-            if (_pendulumBall == null)
+            if (_pendulumBall != null)
             {
-                return;
+                _pendulumBall.ReturnToPool(false);
             }
+
+            BallSpawnDelayTimer.StopTimer();
         }
 
-        public void SpawnPendulumBall()
+        public void OnLevelStarts()
+        {
+            BallSpawnDelayTimer.ResetTimer();
+        }
+
+        private void SpawnPendulumBall()
         {
             int ballPoolIndex = Random.Range(0, BallPools.Count);
 

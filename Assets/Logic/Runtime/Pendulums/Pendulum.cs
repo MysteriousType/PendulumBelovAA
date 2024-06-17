@@ -12,7 +12,7 @@
 
         private Rigidbody2D _rigidbody;
         private bool _isMovingClockwise = true;
-        public bool _IsEnabled;
+        public bool _isEnabled;
 
         private float Angle => transform.rotation.z;
 
@@ -53,18 +53,18 @@
         {
             transform.rotation = Quaternion.identity;
             Rigidbody.velocity = Vector2.zero;
-            _IsEnabled = true;
+            _isEnabled = true;
         }
 
         public void Disable()
         {
             Rigidbody.velocity = Vector2.zero;
-            _IsEnabled = false;
+            _isEnabled = false;
         }
 
         private void FixedUpdate()
         {
-            if (_IsEnabled)
+            if (_isEnabled)
             {
                 Move();
             }
@@ -72,7 +72,7 @@
 
         private void Update()
         {
-            if (_IsEnabled)
+            if (_isEnabled)
             {
                 CheckTouch();
             }
