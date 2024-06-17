@@ -301,6 +301,8 @@
 
         private int GetColumnIndexByXPosiiton(float xPosition)
         {
+            // Magic values, dependent on columns position!
+
             if (xPosition > -1.074f && xPosition < -0.36f)
             {
                 return 0;
