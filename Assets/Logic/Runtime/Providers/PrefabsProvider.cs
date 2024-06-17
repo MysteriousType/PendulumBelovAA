@@ -60,6 +60,8 @@
             BallParticleEffects = ballParticleEffects;
         }
 
+        // ДОБАВИТЬ ПРОИГРЫШ!!!
+
         private void LoadTimeManager()
         {
             const string PATH = "Prefabs/Managers/TimeManager";

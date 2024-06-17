@@ -7,11 +7,14 @@
     public class ContainersManager
     {
         private const int MATRIX_SIZE = 3;
+        private const int FREE_SLOTS_MAXIMUM_SIZE = MATRIX_SIZE * MATRIX_SIZE;
         private const float CHECK_MATCHES_PERIOD_DURATION_TIME = 0.6f;
 
         private readonly Ball[,] Balls = new Ball[MATRIX_SIZE, MATRIX_SIZE];
         private readonly ContainerTrigger BallTrigger;
         private readonly TimerEntity DoubleCheckTimer;
+
+        private int _freeSlotsCount = FREE_SLOTS_MAXIMUM_SIZE;
 
         public ContainersManager(ContainerTrigger ballTrigger)
         {
@@ -42,6 +45,7 @@
             {
                 if (Balls[columnIndex, rowIndex] == null)
                 {
+                    _freeSlotsCount--;
                     Balls[columnIndex, rowIndex] = ball;
                     CheckMatches(columnIndex, rowIndex, ball.BallData);
                     break;
@@ -100,6 +104,16 @@
             if (needToDoubleCheck)
             {
                 DoubleCheckTimer.ResetTimer();
+            }
+
+            CheckFailState();
+        }
+
+        private void CheckFailState()
+        {
+            if (_freeSlotsCount == 0)
+            {
+                UnityEngine.Debug.Log("END");
             }
         }
 
@@ -248,6 +262,8 @@
             {
                 return;
             }
+
+            _freeSlotsCount++;
 
             Balls[removeAtColumnIndex, removeAtRowIndex].ReturnToPool(true);
             Balls[removeAtColumnIndex, removeAtRowIndex] = null;
