@@ -1,6 +1,7 @@
 ﻿namespace Assets.Logic.Runtime
 {
     using Assets.Logic.Runtime.Balls;
+    using Assets.Logic.Runtime.Canvas;
     using Assets.Logic.Runtime.Containers;
     using Assets.Logic.Runtime.Providers;
     using Assets.Logic.Runtime.Score;
@@ -16,6 +17,7 @@
         public static ContainersManager ContainersManager { get; private set; }
         public static ScoreManager ScoreManager { get; private set; }
         public static BallParticleEffectsPool BallParticleEffectsPool { get; private set; }
+        public static CanvasManager CanvasManager { get; private set; }
 
         public static void Initialize()
         {
@@ -26,9 +28,16 @@
             InitializeCameraSize();
             InitializeBallSpawnManager();
             InitializeContainersManager();
+            InitializeCanvasManager();
 
             ScoreManager = new ScoreManager();
             BallParticleEffectsPool = new BallParticleEffectsPool();
+        }
+
+        private static void InitializeCanvasManager()
+        {
+            CanvasManager = new CanvasManager();
+            CanvasManager.OpenMainMenu();
         }
 
         private static void InitializeTime()
