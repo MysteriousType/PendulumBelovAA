@@ -51,6 +51,7 @@
 
         public void ResetAndEnable()
         {
+            transform.localPosition = Vector3.zero;
             transform.rotation = Quaternion.identity;
             Rigidbody.velocity = Vector2.zero;
             _isEnabled = true;

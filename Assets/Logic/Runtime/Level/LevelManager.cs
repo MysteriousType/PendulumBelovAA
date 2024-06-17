@@ -13,7 +13,7 @@
 
         public void RestartLevel()
         {
-            GameContext.BallSpawnManager.OnLevelEnds();
+            GameContext.BallSpawnManager.OnLevelStarts();
             GameContext.CanvasManager.CloseEndgameMenu();
             GameContext.ContainersManager.ClearAll();
             Pendulum.ResetAndEnable();
