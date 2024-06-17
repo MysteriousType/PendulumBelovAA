@@ -1,6 +1,7 @@
 ﻿namespace Assets.Logic.Runtime.Containers
 {
     using Assets.Logic.Runtime.Balls;
+    using Assets.Logic.Runtime.Balls.Data;
     using Assets.Logic.Runtime.Time;
 
     public class ContainersManager
@@ -21,6 +22,11 @@
             DoubleCheckTimer = new TimerEntity(CHECK_MATCHES_PERIOD_DURATION_TIME, onTimeIsUp: PerformDoubleCheck, startTimerOnCreation: false);
         }
 
+        private void AddScore(BallData ballData)
+        {
+            GameContext.ScoreManager.AddScore(ballData.Score);
+        }
+
         private void OnBallEntered(Ball ball)
         {
             ball.OnBallLanded += OnBallLanded;
@@ -37,7 +43,7 @@
                 if (Balls[columnIndex, rowIndex] == null)
                 {
                     Balls[columnIndex, rowIndex] = ball;
-                    CheckMatches(columnIndex, rowIndex, ball.BallData.Id);
+                    CheckMatches(columnIndex, rowIndex, ball.BallData);
                     break;
                 }
             }
@@ -51,8 +57,9 @@
             */
         }
 
-        private void CheckMatches(int checkColumnIndex, int checkRowIndex, int ballId)
+        private void CheckMatches(int checkColumnIndex, int checkRowIndex, BallData ballData)
         {
+            int ballId = ballData.Id;
             bool matchColumn = HasColumnMatch(checkColumnIndex, ballId);
             bool matchRow = HasRowMatch(checkRowIndex, ballId);
             HasDiagonalMatches(checkColumnIndex, checkRowIndex, ballId, out bool matchLeftToRightDiagonal, out bool matchRightToLeftDiagonal);
@@ -60,21 +67,25 @@
             if (matchColumn)
             {
                 ClearColumn(checkColumnIndex);
+                AddScore(ballData);
             }
 
             if (matchRow)
             {
                 ClearRow(checkRowIndex);
+                AddScore(ballData);
             }
 
             if (matchLeftToRightDiagonal)
             {
                 ClearDiagonal(true);
+                AddScore(ballData);
             }
 
             if (matchRightToLeftDiagonal)
             {
                 ClearDiagonal(false);
+                AddScore(ballData);
             }
 
             bool needToShiftBalls = matchRow || matchLeftToRightDiagonal || matchRightToLeftDiagonal;
@@ -98,21 +109,23 @@
             const int ROW_INDEX_2 = 2;
             const int COLUMN_INDEX_DUMMY = 0;
 
-            int? ballIdRowIndex1 = Balls[COLUMN_INDEX_DUMMY, ROW_INDEX_1]?.BallData.Id;
-            int? ballIdRowIndex2 = Balls[COLUMN_INDEX_DUMMY, ROW_INDEX_2]?.BallData.Id;
+            BallData ballDataRowIndex1 = Balls[COLUMN_INDEX_DUMMY, ROW_INDEX_1]?.BallData;
+            BallData ballDataRowIndex2 = Balls[COLUMN_INDEX_DUMMY, ROW_INDEX_2]?.BallData;
 
-            bool hasMatchRowIndex1 = ballIdRowIndex1.HasValue && HasRowMatch(1, ballIdRowIndex1.Value);
-            bool hasMatchRowIndex2 = ballIdRowIndex2.HasValue && HasRowMatch(2, ballIdRowIndex2.Value);
+            bool hasMatchRowIndex1 = ballDataRowIndex1 != null && HasRowMatch(1, ballDataRowIndex1.Id);
+            bool hasMatchRowIndex2 = ballDataRowIndex2 != null && HasRowMatch(2, ballDataRowIndex2.Id);
             bool needToShiftBalls = hasMatchRowIndex1 || hasMatchRowIndex2;
 
             if (hasMatchRowIndex1)
             {
                 ClearRow(ROW_INDEX_1);
+                AddScore(ballDataRowIndex1);
             }
 
             if (hasMatchRowIndex2)
             {
                 ClearRow(ROW_INDEX_2);
+                AddScore(ballDataRowIndex2);
             }
 
             if (needToShiftBalls)

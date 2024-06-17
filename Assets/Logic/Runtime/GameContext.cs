@@ -3,6 +3,7 @@
     using Assets.Logic.Runtime.Balls;
     using Assets.Logic.Runtime.Containers;
     using Assets.Logic.Runtime.Providers;
+    using Assets.Logic.Runtime.Score;
     using Assets.Logic.Runtime.Time;
     using UnityEngine;
     using UnityObject = UnityEngine.Object;
@@ -13,6 +14,7 @@
         public static BallSpawnManager BallSpawnManager { get; private set; }
         public static TimeManager TimeManager { get; private set; }
         public static ContainersManager ContainersManager { get; private set; }
+        public static ScoreManager ScoreManager { get; private set; }
 
         public static void Initialize()
         {
@@ -23,6 +25,8 @@
             InitializeCameraSize();
             InitializeBallSpawnManager();
             InitializeContainersManager();
+
+            ScoreManager = new ScoreManager();
         }
 
         private static void InitializeTime()
