@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _id: 2
   _score: 1000
+  _particleEffectName: BallParticleEffectBlue

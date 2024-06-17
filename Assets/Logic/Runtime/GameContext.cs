@@ -15,6 +15,7 @@
         public static TimeManager TimeManager { get; private set; }
         public static ContainersManager ContainersManager { get; private set; }
         public static ScoreManager ScoreManager { get; private set; }
+        public static BallParticleEffectsPool BallParticleEffectsPool { get; private set; }
 
         public static void Initialize()
         {
@@ -27,6 +28,7 @@
             InitializeContainersManager();
 
             ScoreManager = new ScoreManager();
+            BallParticleEffectsPool = new BallParticleEffectsPool();
         }
 
         private static void InitializeTime()

@@ -8,12 +8,14 @@
     public class PrefabsProvider
     {
         public IReadOnlyList<Ball> BallPrefabs { get; private set; }
+        public IReadOnlyList<BallParticleEffect> BallParticleEffects { get; private set; }
         public TimeManager TimeManager { get; private set; }
 
         public PrefabsProvider()
         {
             LoadTimeManager();
             LoadBalls();
+            LoadBallParticleEffects();
         }
 
         private void LoadBalls()
@@ -35,6 +37,27 @@
             }
 
             BallPrefabs = balls;
+        }
+
+        private void LoadBallParticleEffects()
+        {
+            string[] prefabNames = new string[]
+            {
+                "BallParticleEffectRed",
+                "BallParticleEffectGreen",
+                "BallParticleEffectBlue",
+            };
+
+            List<BallParticleEffect> ballParticleEffects = new();
+
+            foreach (string prefabName in prefabNames)
+            {
+                string path = $"Prefabs/Particles/{prefabName}";
+                BallParticleEffect ballParticleEffect = LoadPrefab(path).GetComponent<BallParticleEffect>();
+                ballParticleEffects.Add(ballParticleEffect);
+            }
+
+            BallParticleEffects = ballParticleEffects;
         }
 
         private void LoadTimeManager()

@@ -59,13 +59,26 @@
         {
             if (IsSimulated && transform.position.y <= -10f)
             {
-                _onReturnToPool?.Invoke(this);
+                ReturnToPool(false);
             }
         }
 
-        public void ReturnToPool()
+        public void ReturnToPool(bool useParticleEffect)
         {
             _onReturnToPool?.Invoke(this);
+
+            if (useParticleEffect)
+            {
+                SetupParticleEffect();
+            }
+        }
+
+        private void SetupParticleEffect()
+        {
+            if (GameContext.BallParticleEffectsPool.TryGetParticleEffect(BallData.ParticleEffectName, out BallParticleEffect ballParticleEffect))
+            {
+                ballParticleEffect.transform.position = transform.position;
+            }
         }
 
         public void AttachToParentObject(GameObject parentObject)

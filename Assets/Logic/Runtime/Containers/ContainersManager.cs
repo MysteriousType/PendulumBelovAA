@@ -249,7 +249,7 @@
                 return;
             }
 
-            Balls[removeAtColumnIndex, removeAtRowIndex].ReturnToPool();
+            Balls[removeAtColumnIndex, removeAtRowIndex].ReturnToPool(true);
             Balls[removeAtColumnIndex, removeAtRowIndex] = null;
         }
 

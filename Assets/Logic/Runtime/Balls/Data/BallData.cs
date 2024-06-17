@@ -12,8 +12,13 @@
         [SerializeField]
         private int _score;
 
+        [SerializeField]
+        private string _particleEffectName;
+
         public int Id => _id;
 
         public int Score => _score;
+
+        public string ParticleEffectName => _particleEffectName;
     }
 }
