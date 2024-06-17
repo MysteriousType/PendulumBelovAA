@@ -12,6 +12,7 @@
 
         private Rigidbody2D _rigidbody;
         private bool _isMovingClockwise = true;
+        public bool _IsEnabled;
 
         private float Angle => transform.rotation.z;
 
@@ -35,19 +36,46 @@
             }
         }
 
-        private void Start()
+        private Rigidbody2D Rigidbody
         {
-            _rigidbody = GetComponent<Rigidbody2D>();
+            get
+            {
+                if (_rigidbody == null)
+                {
+                    _rigidbody = GetComponent<Rigidbody2D>();
+                }
+
+                return _rigidbody;
+            }
+        }
+
+        public void ResetAndEnable()
+        {
+            transform.rotation = Quaternion.identity;
+            Rigidbody.velocity = Vector2.zero;
+            _IsEnabled = true;
+        }
+
+        public void Disable()
+        {
+            Rigidbody.velocity = Vector2.zero;
+            _IsEnabled = false;
         }
 
         private void FixedUpdate()
         {
-            Move();
+            if (_IsEnabled)
+            {
+                Move();
+            }
         }
 
         private void Update()
         {
-            CheckTouch();
+            if (_IsEnabled)
+            {
+                CheckTouch();
+            }
         }
 
         private void CheckTouch()
@@ -56,7 +84,7 @@
 
             if (Input.touchCount > 0)
             {
-                GameContext.BallSpawnManager.TryUnattachPendulumBall(_rigidbody.velocity * VELOCITY_MULTIPLIER);
+                GameContext.BallSpawnManager.TryUnattachPendulumBall(Rigidbody.velocity * VELOCITY_MULTIPLIER);
             }
         }
 
@@ -67,11 +95,11 @@
 
             if (IsMovingClockwise)
             {
-                _rigidbody.angularVelocity = moveSpeed;
+                Rigidbody.angularVelocity = moveSpeed;
             }
             else
             {
-                _rigidbody.angularVelocity = moveSpeed * -1f;
+                Rigidbody.angularVelocity = moveSpeed * -1f;
             }
         }
     }

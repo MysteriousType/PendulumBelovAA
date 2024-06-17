@@ -7,6 +7,7 @@
     {
         private readonly GameObject MainMenuPanel;
         private readonly RectTransform MainMenuTitleTransform;
+        private readonly GameObject EndgamePanel;
 
         private int? _titleScaleTweenId = null;
 
@@ -14,12 +15,29 @@
         {
             MainMenuPanel = GameObject.Find("MainMenuPanel");
             MainMenuTitleTransform = MainMenuPanel.transform.FindComponentInChild<RectTransform>("TitleText");
+            EndgamePanel = GameObject.Find("EndgamePanel");
+        }
+
+        public void OpenEndgameMenu()
+        {
+            EndgamePanel.SetActive(true);
+        }
+
+        public void CloseEndgameMenu()
+        {
+            EndgamePanel.SetActive(false);
         }
 
         public void OpenMainMenu()
         {
             MainMenuPanel.SetActive(true);
             EnableMainMenuTitleTweeen();
+        }
+
+        public void OpenMainMenuFromLevel()
+        {
+            OpenMainMenu();
+            CloseEndgameMenu();
         }
 
         public void CloseMainMenu()

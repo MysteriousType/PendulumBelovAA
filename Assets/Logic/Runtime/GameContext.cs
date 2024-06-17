@@ -3,6 +3,8 @@
     using Assets.Logic.Runtime.Balls;
     using Assets.Logic.Runtime.Canvas;
     using Assets.Logic.Runtime.Containers;
+    using Assets.Logic.Runtime.Level;
+    using Assets.Logic.Runtime.Pendulums;
     using Assets.Logic.Runtime.Providers;
     using Assets.Logic.Runtime.Score;
     using Assets.Logic.Runtime.Time;
@@ -18,6 +20,7 @@
         public static ScoreManager ScoreManager { get; private set; }
         public static BallParticleEffectsPool BallParticleEffectsPool { get; private set; }
         public static CanvasManager CanvasManager { get; private set; }
+        public static LevelManager LevelManager { get; private set; }
 
         public static void Initialize()
         {
@@ -29,9 +32,16 @@
             InitializeBallSpawnManager();
             InitializeContainersManager();
             InitializeCanvasManager();
+            InitializeLevelManager();
 
             ScoreManager = new ScoreManager();
             BallParticleEffectsPool = new BallParticleEffectsPool();
+        }
+
+        private static void InitializeLevelManager()
+        {
+            Pendulum pendulum = GameObject.Find("PendulumHand").GetComponent<Pendulum>();
+            LevelManager = new LevelManager(pendulum);
         }
 
         private static void InitializeCanvasManager()

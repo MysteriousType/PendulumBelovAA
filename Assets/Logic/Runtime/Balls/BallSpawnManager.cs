@@ -22,8 +22,14 @@
             BallSpawnDelayTimer = new TimerEntity(BALL_SPAWN_DELAY_TIME, onTimeIsUp: SpawnPendulumBall, startTimerOnCreation: false);
 
             InitializePooling();
+        }
 
-            SpawnPendulumBall(); // TEMPOOO!!!!
+        public void ClearPendulumBall()
+        {
+            if (_pendulumBall == null)
+            {
+                return;
+            }
         }
 
         public void SpawnPendulumBall()

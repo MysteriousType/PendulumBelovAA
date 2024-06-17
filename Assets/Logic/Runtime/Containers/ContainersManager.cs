@@ -113,7 +113,7 @@
         {
             if (_freeSlotsCount == 0)
             {
-                UnityEngine.Debug.Log("END");
+                GameContext.LevelManager.FailLevel();
             }
         }
 
@@ -256,7 +256,18 @@
             }
         }
 
-        private void RemoveBall(int removeAtColumnIndex, int removeAtRowIndex)
+        public void ClearAll()
+        {
+            for (int columnIndex = 0; columnIndex < MATRIX_SIZE; columnIndex++)
+            {
+                for (int rowIndex = 0; rowIndex < MATRIX_SIZE; rowIndex++)
+                {
+                    RemoveBall(columnIndex, rowIndex);
+                }
+            }
+        }
+
+        private void RemoveBall(int removeAtColumnIndex, int removeAtRowIndex, bool useParticleEffect = true)
         {
             if (Balls[removeAtColumnIndex, removeAtRowIndex] == null)
             {
@@ -265,7 +276,7 @@
 
             _freeSlotsCount++;
 
-            Balls[removeAtColumnIndex, removeAtRowIndex].ReturnToPool(true);
+            Balls[removeAtColumnIndex, removeAtRowIndex].ReturnToPool(useParticleEffect);
             Balls[removeAtColumnIndex, removeAtRowIndex] = null;
         }
 
